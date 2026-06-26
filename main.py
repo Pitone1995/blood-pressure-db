@@ -2,6 +2,11 @@ import customtkinter as ctk
 
 from ui.auth import do_login
 
+from database.db_manager import inizializza_db
+
+# Inizializza il database prima di mostrare la grafica
+inizializza_db()
+
 ctk.set_appearance_mode("System")  
 ctk.set_default_color_theme("blue")
 
