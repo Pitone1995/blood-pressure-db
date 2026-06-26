@@ -5,6 +5,7 @@ import os
 DB_PATH = os.path.join("storage", "app_data.db")
 
 def inizializza_db():
+    """Crea la cartella storage e le tabelle se non esistono."""
     if not os.path.exists("storage"):
         os.makedirs("storage")
         
@@ -20,20 +21,20 @@ def inizializza_db():
         )
     """)
     
-    # 2. NUOVA: Tabella Misurazioni Pressione
+    # 2. Tabella Misurazioni Pressione (supporto millisecondi stringa)
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS misurazioni (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             utente_id INTEGER NOT NULL,
-            sistolica INTEGER NOT NULL,   -- La "Massima"
-            diastolica INTEGER NOT NULL,  -- La "Minima"
-            pulsazioni INTEGER NOT NULL,  -- Battiti al minuto
-            data_ora DATETIME DEFAULT CURRENT_TIMESTAMP,
+            sistolica INTEGER NOT NULL,
+            diastolica INTEGER NOT NULL,
+            pulsazioni INTEGER NOT NULL,
+            data_ora TEXT NOT NULL,
             FOREIGN KEY(utente_id) REFERENCES utenti(id)
         )
     """)
     
-    # Utente di test
+    # Utente di test predefinito
     cursor.execute("SELECT COUNT(*) FROM utenti")
     if cursor.fetchone()[0] == 0:
         cursor.execute("INSERT INTO utenti (username, password) VALUES (?, ?)", ("pitone", "1234"))
